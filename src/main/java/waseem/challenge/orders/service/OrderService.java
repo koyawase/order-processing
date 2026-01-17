@@ -1,11 +1,13 @@
 package waseem.challenge.orders.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import waseem.challenge.exception.InvalidOrderStatusException;
 import waseem.challenge.exception.OrderHistoryNotFoundException;
 import waseem.challenge.exception.OrderNotFoundException;
 import waseem.challenge.orders.dto.OrderDTO;
+import waseem.challenge.orders.dto.OrderStatusChangedEvent;
 import waseem.challenge.orders.entity.OrderStatus;
 import waseem.challenge.orders.entity.Orders;
 import waseem.challenge.orders.dto.Status;
@@ -24,6 +26,9 @@ public class OrderService {
     @Autowired
     OrderMapper orderMapper;
 
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
+
     public List<OrderDTO> getAll() {
         return orderRepository.findAll().stream()
                 .map(orderMapper::toDTO)
@@ -39,6 +44,7 @@ public class OrderService {
         order.addHistory(created);
 
         Orders saved = orderRepository.save(order);
+        eventPublisher.publishEvent(new OrderStatusChangedEvent(saved, Status.CREATED));
 
         return orderMapper.toDTO(saved);
     }
@@ -61,6 +67,8 @@ public class OrderService {
         order.addHistory(statusEntry);
 
         Orders saved = orderRepository.save(order);
+
+        eventPublisher.publishEvent(new OrderStatusChangedEvent(saved, newStatus));
 
         return orderMapper.toDTO(saved);
     }
