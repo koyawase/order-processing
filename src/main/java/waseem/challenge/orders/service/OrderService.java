@@ -35,6 +35,12 @@ public class OrderService {
                 .toList();
     }
 
+    public List<OrderDTO> getById(Long id) {
+        return orderRepository.findById(id).stream()
+                .map(orderMapper::toDTO)
+                .toList();
+    }
+
     public OrderDTO createOrder(String name) {
         Orders order = new Orders();
         order.setName(name);

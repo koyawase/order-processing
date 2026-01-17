@@ -20,6 +20,11 @@ public class OrderController {
         return orderService.getAll();
     }
 
+    @GetMapping("/{id}")
+    public List<OrderDTO> getById(@PathVariable Long id) {
+        return orderService.getById(id);
+    }
+
     @PutMapping("/{id}")
     public OrderDTO updateStatus(
             @PathVariable Long id,
