@@ -2,9 +2,7 @@ package waseem.challenge.orders.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import waseem.challenge.exception.ConflictOrderException;
 import waseem.challenge.exception.InvalidOrderStatusException;
 import waseem.challenge.exception.OrderHistoryNotFoundException;

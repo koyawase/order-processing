@@ -33,10 +33,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGeneral(Exception ex, HttpServletRequest request) {
-        ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request.getRequestURI());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 }

@@ -13,6 +13,11 @@ public class Orders {
     private UUID id;
 
     private String name;
+
+    //Generate id by default but allow setting it manually
+    public Orders() {
+        this.id = UUID.randomUUID();
+    }
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL,
