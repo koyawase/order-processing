@@ -15,7 +15,10 @@ public class NotificationFactory {
 
     public NotificationFactory(List<NotificationStrategy> strategies) {
         this.strategyMap = strategies.stream()
-                .collect(Collectors.toMap(NotificationStrategy::getSupportedType, s -> s));
+                .collect(Collectors.toMap(
+                        NotificationStrategy::getSupportedType,
+                        strategy -> new RetryingNotificationDecorator(strategy)
+                ));
     }
 
     public NotificationStrategy getStrategy(Status status) {
