@@ -22,10 +22,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidOrderStatusException.class)
-    public ResponseEntity<ApiError> handleInvalidTransition(InvalidOrderStatusException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiError> handleInvalidTransitionException(InvalidOrderStatusException ex, HttpServletRequest request) {
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ConflictOrderException.class)
+    public ResponseEntity<ApiError> handleConflictOrderException(ConflictOrderException ex, HttpServletRequest request) {
+        ApiError error = new ApiError(HttpStatus.CONFLICT, ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneral(Exception ex, HttpServletRequest request) {

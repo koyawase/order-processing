@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class Orders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private String name;
     @OneToMany(
@@ -20,8 +20,8 @@ public class Orders {
     )
     private List<OrderStatus> history = new ArrayList<>();
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
     public String getName() {
         return name;

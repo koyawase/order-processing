@@ -2,11 +2,15 @@ package waseem.challenge.orders.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import waseem.challenge.exception.ConflictOrderException;
 import waseem.challenge.exception.InvalidOrderStatusException;
 import waseem.challenge.exception.OrderHistoryNotFoundException;
 import waseem.challenge.exception.OrderNotFoundException;
 import waseem.challenge.orders.dto.OrderDTO;
+import waseem.challenge.orders.dto.OrderRequest;
 import waseem.challenge.orders.dto.OrderStatusChangedEvent;
 import waseem.challenge.orders.entity.OrderStatus;
 import waseem.challenge.orders.entity.Orders;
@@ -16,6 +20,7 @@ import waseem.challenge.orders.repository.OrderRepository;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -35,15 +40,19 @@ public class OrderService {
                 .toList();
     }
 
-    public List<OrderDTO> getById(Long id) {
+    public List<OrderDTO> getById(UUID id) {
         return orderRepository.findById(id).stream()
                 .map(orderMapper::toDTO)
                 .toList();
     }
 
-    public OrderDTO createOrder(String name) {
+    public OrderDTO createOrder(OrderRequest request) {
+        if (orderRepository.existsById(request.id())) {
+            throw new ConflictOrderException(request.id());
+        }
         Orders order = new Orders();
-        order.setName(name);
+        order.setName(request.name());
+        order.setId(request.id());
 
         OrderStatus created = new OrderStatus();
         created.setStatus(Status.CREATED);
@@ -55,7 +64,7 @@ public class OrderService {
         return orderMapper.toDTO(saved);
     }
 
-    public OrderDTO updateStatus(Long orderId, Status newStatus) {
+    public OrderDTO updateStatus(UUID orderId, Status newStatus) {
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() ->  new OrderNotFoundException(orderId));
 

@@ -3,10 +3,12 @@ package waseem.challenge.orders.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import waseem.challenge.orders.dto.OrderDTO;
+import waseem.challenge.orders.dto.OrderRequest;
 import waseem.challenge.orders.dto.Status;
 import waseem.challenge.orders.service.OrderService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
@@ -21,20 +23,20 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public List<OrderDTO> getById(@PathVariable Long id) {
+    public List<OrderDTO> getById(@PathVariable UUID id) {
         return orderService.getById(id);
     }
 
     @PutMapping("/{id}")
     public OrderDTO updateStatus(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @RequestParam Status status
     ) {
         return orderService.updateStatus(id, status);
     }
 
     @PostMapping
-    public OrderDTO create(@RequestParam String name) {
-        return orderService.createOrder(name);
+    public OrderDTO create(@RequestBody OrderRequest request) {
+        return orderService.createOrder(request);
     }
 }
