@@ -1,6 +1,8 @@
 package waseem.challenge.orders.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import waseem.challenge.orders.dto.OrderDTO;
 import waseem.challenge.orders.dto.OrderRequest;
@@ -18,25 +20,29 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping
-    public List<OrderDTO> getAll() {
-        return orderService.getAll();
+    public ResponseEntity<List<OrderDTO>> getAll() {
+        List<OrderDTO> orders = orderService.getAll();
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public List<OrderDTO> getById(@PathVariable UUID id) {
-        return orderService.getById(id);
+    public ResponseEntity<OrderDTO> getById(@PathVariable UUID id) {
+        OrderDTO order = orderService.getById(id);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public OrderDTO updateStatus(
+    public ResponseEntity<OrderDTO> updateStatus(
             @PathVariable UUID id,
             @RequestParam Status status
     ) {
-        return orderService.updateStatus(id, status);
+        OrderDTO updated = orderService.updateStatus(id, status);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @PostMapping
-    public OrderDTO create(@RequestBody OrderRequest request) {
-        return orderService.createOrder(request);
+    public ResponseEntity<OrderDTO> create(@RequestBody OrderRequest request) {
+        OrderDTO created = orderService.createOrder(request);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }

@@ -38,10 +38,10 @@ public class OrderService {
                 .toList();
     }
 
-    public List<OrderDTO> getById(UUID id) {
-        return orderRepository.findById(id).stream()
+    public OrderDTO getById(UUID id) {
+        return orderRepository.findById(id)
                 .map(orderMapper::toDTO)
-                .toList();
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     public OrderDTO createOrder(OrderRequest request) {

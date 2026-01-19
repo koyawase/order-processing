@@ -2,6 +2,7 @@ package waseem.challenge;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import waseem.challenge.orders.dto.OrderRequest;
 import waseem.challenge.orders.service.OrderService;
@@ -9,6 +10,7 @@ import waseem.challenge.orders.service.OrderService;
 import java.util.UUID;
 
 @Component
+@Profile("!test")
 public class SeedData implements CommandLineRunner {
 
     @Autowired
