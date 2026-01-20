@@ -14,6 +14,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  api-docs:
+    enabled: false # Disables the automatic generation from code
+    swagger-ui:
+      url: /api-spec.yaml
+      path: /swagger-ui.html
 
 server:
   port: 8081

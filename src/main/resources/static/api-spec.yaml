@@ -167,6 +167,10 @@ components:
           example: "Laptop"
     OrderResponse:
       type: object
+      required:
+        - id
+        - name
+        - history
       properties:
         id:
           type: string
@@ -182,10 +186,13 @@ components:
 
     OrderHistory:
       type: object
+      required:
+        - status
+        - timestamp
       properties:
         status:
           $ref: '#/components/schemas/Status'
-        updatedAt:
+        timestamp:
           type: string
           format: date-time
 

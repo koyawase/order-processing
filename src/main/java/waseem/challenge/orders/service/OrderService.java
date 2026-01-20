@@ -3,6 +3,7 @@ package waseem.challenge.orders.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import waseem.challenge.exception.ConflictOrderException;
 import waseem.challenge.exception.InvalidOrderStatusException;
 import waseem.challenge.exception.OrderHistoryNotFoundException;
@@ -44,6 +45,7 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
+    @Transactional
     public OrderDTO createOrder(OrderRequest request) {
         if (orderRepository.existsById(request.id())) {
             throw new ConflictOrderException(request.id());
@@ -62,6 +64,7 @@ public class OrderService {
         return orderMapper.toDTO(saved);
     }
 
+    @Transactional
     public OrderDTO updateStatus(UUID orderId, Status newStatus) {
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() ->  new OrderNotFoundException(orderId));

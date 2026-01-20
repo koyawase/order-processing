@@ -1,13 +1,47 @@
 ## Project Overview
 
 This project implements a RESTful API for managing orders.
-It provides endpoints for creating, retrieving and updating orders. 
+It provides endpoints for creating, retrieving and updating orders.
+
+The project is set to run on port `8081`.
 
 The API is built using Spring Boot and uses a H2 in memory database.
 To load data on startup, use the `SeedData.java` command line runner. There are examples pre-loaded already.
 
+The notifications system takes into consideration several design patterns:
+
+### Strategy
+
+The Strategy pattern is used to handle different notification delivery methods (Email, SMS) interchangeably.
+
+* **Implementation:** Define a NotificationStrategy interface. The system doesn't care how a message is sent; it just calls `.send()`.
+* **Value:** This allows us to swap out an SMS provider or add a new delivery channel without changing the core business logic in the `OrderService`.
+
+### Factory
+
+The Factory pattern centralizes the logic for creating the appropriate notification objects.
+
+* **Implementation:** A NotificationFactory decides which strategy to instantiate based on the Order Status.
+* **Value:** It removes the burden of object creation from the service layer, keeping the OrderService focused strictly on order processing rather than complex object initialization.
+
+### Decorator
+
+The Decorator pattern is used to add extra features to notifications dynamically at runtime without subclassing.
+
+* **Implementation:** Wrap the standard notification a RetryDecorator for extra functionality.
+* **Value:** This allows us to add extra functionality to any notification type without cluttering the base notification code.
+
+### Observer
+
+The Observer pattern follows the principals of event-driven architecture.
+
+* **Implementation:** When an order status changes, the OrderService (the Subject) publishes an OrderStatusChangedEvent. Listeners react to this event individually.
+* **Value:** This decouples the Order logic from the Notification logic. The OrderService doesn't know (or care) that an email is being sent. It just announces that the status changed.
+
 ## API Specification
-[Orders api specificatopn](./api-spec.yaml)
+[Orders api specification](./src/main/resources/static/api-spec.yaml)
+
+When application is running found at: `http://localhost:8081/swagger-ui/index.html`
 
 ## Considerations
 
